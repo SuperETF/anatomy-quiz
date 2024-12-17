@@ -51,26 +51,33 @@ function nextQuestion() {
 // 정답 확인
 function checkAnswer() {
    const userAnswer = document.getElementById('answer').value.trim().toLowerCase();
-   const answers = [
-       currentQuestion.정답_구용어,
-       currentQuestion.정답_신용어,
-       currentQuestion.정답_영어
-   ].map(answer => answer.toLowerCase());
+   const language = document.getElementById('language').value;
+   
+   let correctAnswers;
+   if (language === 'korean') {
+       correctAnswers = [
+           currentQuestion.정답_구용어.toLowerCase(),
+           currentQuestion.정답_신용어.toLowerCase()
+       ];
+   } else {
+       correctAnswers = [
+           currentQuestion.정답_영어.toLowerCase()
+       ];
+   }
 
    const feedback = document.getElementById('feedback');
-   
    stats.total++;
    
-   if (answers.includes(userAnswer)) {
+   if (correctAnswers.includes(userAnswer)) {
        stats.correct++;
        feedback.textContent = `정답입니다! 👏\n${currentQuestion.설명}`;
        feedback.classList.remove('hidden', 'bg-red-100', 'text-red-700');
        feedback.classList.add('bg-green-100', 'text-green-700');
-   } else {
-       feedback.textContent = `틀렸습니다. 정답은:\n구용어: ${currentQuestion.정답_구용어}\n신용어: ${currentQuestion.정답_신용어}\n영어: ${currentQuestion.정답_영어}\n\n힌트: ${currentQuestion.힌트}`;
-       feedback.classList.remove('hidden', 'bg-green-100', 'text-green-700');
-       feedback.classList.add('bg-red-100', 'text-red-700');
-   }
+    } else {
+        feedback.textContent = `틀렸습니다. 정답은 \n구용어: ${currentQuestion.정답_구용어}\n신용어: ${currentQuestion.정답_신용어}\n영어: ${currentQuestion.정답_영어}\n\n힌트: ${currentQuestion.힌트}`;
+        feedback.classList.remove('hidden', 'bg-green-100', 'text-green-700');
+        feedback.classList.add('bg-red-100', 'text-red-700');
+    }
    
    updateStats();
 }
@@ -92,6 +99,12 @@ document.getElementById('answer').addEventListener('keypress', function(e) {
 
 // 카테고리 변경 시 새로운 문제 불러오기
 document.getElementById('category').addEventListener('change', nextQuestion);
+
+// 언어 변경 시 답변 입력창 초기화
+document.getElementById('language').addEventListener('change', function() {
+   document.getElementById('answer').value = '';
+   document.getElementById('feedback').classList.add('hidden');
+});
 
 // 전역에서 함수 사용 가능하도록 설정
 window.checkAnswer = checkAnswer;
