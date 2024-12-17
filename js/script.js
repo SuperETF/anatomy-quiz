@@ -2,7 +2,7 @@
 import { quizData } from './data.js';
 
 let usedQuestions = {
-    bones: [],
+    bones: [뼈],
     muscles: [],
     both: []
 };
