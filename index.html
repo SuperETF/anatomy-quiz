@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>해부학 퀴즈</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 한글 폰트 - 프리텐다드 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
     <style>
         body {
@@ -16,27 +14,24 @@
 </head>
 <body class="bg-gray-50">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <!-- 헤더 -->
         <header class="text-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800">해부학 퀴즈</h1>
-            <p class="text-gray-600 mt-2">당신의 해부학 지식을 테스트해보세요!</p>
+            <p class="text-gray-600 mt-2">해부학 지식을 테스트해보세요!</p>
         </header>
 
-        <!-- 퀴즈 컨테이너 -->
         <div class="bg-white rounded-lg shadow-md p-6">
             <!-- 카테고리 선택 -->
             <div class="mb-6">
                 <select id="category" class="w-full p-2 border rounded-md">
-                    <option value="bones">뼈</option>
-                    <option value="muscles">근육</option>
-                    <option value="both">전체</option>
+                    <option value="bone">뼈</option>
+                    <option value="muscle">근육</option>
                 </select>
             </div>
 
             <!-- 문제 영역 -->
-            <div class="mb-6">
+            <div id="question-container" class="mb-6">
                 <h2 class="text-lg font-semibold mb-2">문제</h2>
-                <p id="question" class="text-gray-700">문제를 불러오는 중...</p>
+                <p id="question" class="text-gray-700"></p>
             </div>
 
             <!-- 답변 입력 -->
@@ -79,8 +74,7 @@
         </div>
     </div>
 
-    
-<script src="js/data.js" type="module"></script>
-<script src="js/script.js" type="module"></script>
+    <script src="js/data.js" type="module"></script>
+    <script src="js/script.js" type="module"></script>
 </body>
 </html>

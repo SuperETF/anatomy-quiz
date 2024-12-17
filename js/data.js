@@ -1,7 +1,7 @@
 
-export const quizData = [
+export const quizData = 
+[
 
-  [
     {
       "ID": "",
       "카테고리": "뼈",
@@ -682,5 +682,5 @@ export const quizData = [
       "힌트": "손목 부위에 위치합니다",
       "설명": "수근골은 손목의 유연성을 제공하며 손의 움직임을 돕는 구조입니다"
     }
-  ]
-  ];
+  
+];
