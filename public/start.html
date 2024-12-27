@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>해부학 퀴즈</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        #timer-container {
+            width: 100%;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #timer-bar {
+            width: 100%;
+            height: 100%;
+            background-color: #4caf50;
+            transition: width 0.2s linear;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">해부학 퀴즈</h1>
+            <p class="text-gray-600 mt-2">해부학 지식을 테스트해보세요!</p>
+        </header>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- 카테고리와 언어 선택 -->
+            <div class="mb-6 flex gap-4">
+                <select id="category" class="w-1/2 p-2 border rounded-md">
+                    <option value="bone">뼈</option>
+                    <option value="muscle">근육</option>
+                </select>
+                <select id="language" class="w-1/2 p-2 border rounded-md">
+                    <option value="korean">한국어</option>
+                    <option value="english">영어</option>
+                </select>
+            </div>
+
+            <!-- 타이머 바 -->
+            <div id="timer-container">
+                <div id="timer-bar"></div>
+            </div>
+
+            <!-- 문제 영역 -->
+            <div id="question-container" class="mb-6">
+                <h2 class="text-lg font-semibold mb-2">문제</h2>
+                <p id="question" class="text-gray-700"></p>
+            </div>
+
+            <!-- 답변 입력 -->
+            <div class="mb-6">
+                <input type="text" id="answer" 
+                       class="w-full p-2 border rounded-md" 
+                       placeholder="답을 입력하세요">
+            </div>
+
+            <!-- 버튼 -->
+            <div class="flex gap-4">
+                <button onclick="checkAnswer()" 
+                        class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                    정답 확인
+                </button>
+                <button onclick="nextQuestion()" 
+                        class="flex-1 bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700">
+                    다음 문제
+                </button>
+            </div>
+
+            <!-- 피드백 메시지 -->
+            <div id="feedback" class="mt-4 p-4 rounded-md hidden"></div>
+        </div>
+
+        <!-- 통계 -->
+        <div class="mt-6 grid grid-cols-3 gap-4 text-center">
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <div class="text-gray-600">정답률</div>
+                <div id="accuracy" class="text-2xl font-bold">0%</div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <div class="text-gray-600">푼 문제</div>
+                <div id="answered" class="text-2xl font-bold">0 / <span id="total-questions">0</span></div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <div class="text-gray-600">맞은 문제</div>
+                <div id="correct" class="text-2xl font-bold">0</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js" type="module"></script>
+    <script src="js/script.js" type="module"></script>
+</body>
+</html>
