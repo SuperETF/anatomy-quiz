@@ -15,3 +15,25 @@ nul not found
     background-color: #34d399; /* Tailwind green-400 */
     transition: width 0.1s linear; /* 0.1초 동안 부드럽게 변화 */
 }
+/* 피드백 박스 스타일 */
+#feedback {
+    margin-bottom: 30px;  /* 피드백 박스 아래에 여백 추가 */
+    padding: 15px;
+    border-radius: 8px;
+}
+
+/* 버튼 스타일 */
+button {
+    margin-top: 20px;  /* 버튼 위쪽에 여백 추가 */
+    margin-right: 10px; /* 버튼들 사이의 간격 추가 */
+}
+
+/* '다음 문제' 버튼과 피드백 박스 간의 간격을 충분히 주기 */
+#next-question {
+    margin-top: 30px; /* '다음 문제' 버튼 위쪽에 여백 추가 */
+}
+
+/* 정답 확인 버튼과 '다음 문제' 버튼 사이의 간격을 확실히 추가 */
+#check-answer {
+    margin-bottom: 20px; /* 정답 확인 버튼과 그 아래 버튼 사이에 간격 추가 */
+}
