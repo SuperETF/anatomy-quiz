@@ -5,7 +5,7 @@ let correctAnswers = 0;
 let totalQuestions = 0;
 let filteredQuizData = [];
 let timer;
-let timerSeconds = 10;  // 문제당 10초로 설정
+let timerSeconds = 30;  // 문제당 20초로 설정
 
 // 총 문제 수 표시
 const totalQuestionsElement = document.getElementById("total-questions");
@@ -33,7 +33,7 @@ function filterQuizByCategory(category) {
 
 // 타이머 시작
 function startTimer() {
-    timerSeconds = 10;  // 매 문제마다 10초로 초기화
+    timerSeconds = 20;  // 매 문제마다 10초로 초기화
     timerText.innerText = timerSeconds;  // 남은 시간 텍스트 업데이트
     timerBar.style.width = "100%";  // 타이머 막대 초기화 (100%에서 시작)
 
@@ -42,24 +42,23 @@ function startTimer() {
             timerSeconds -= 0.1;  // 0.1초씩 감소
             timerText.innerText = timerSeconds.toFixed(1); // 소수점 한 자리로 남은 시간 업데이트
 
-            const widthPercentage = (timerSeconds / 10) * 100;
+            const widthPercentage = (timerSeconds / 20) * 100;
             timerBar.style.width = `${widthPercentage}%`;  // 타이머 막대 너비 업데이트
         } else {
             clearInterval(timer);  // 타이머 중지
             checkAnswer();  // 시간이 다 되면 자동으로 정답 확인
-            nextQuestion();  // 문제를 넘기기
         }
     }, 100);  // 0.1초마다 업데이트
 }
 
-// 정답 확인 함수
+// 정답 확인 함수 (대소문자 구분 없이, 띄어쓰기 상관없이 처리)
 function checkAnswer() {
     const currentData = filteredQuizData[currentQuestionIndex];
-    const userAnswer = document.getElementById("answer").value.trim();
+    const userAnswer = document.getElementById("answer").value.trim().toLowerCase().replace(/\s+/g, '');  // 대소문자, 공백 처리
     const correctAnswersArray = [
-        currentData?.["정답_구용어"],
-        currentData?.["정답_신용어"],
-        currentData?.["정답_영어"],
+        currentData?.["정답_구용어"].toLowerCase().replace(/\s+/g, ''),
+        currentData?.["정답_신용어"].toLowerCase().replace(/\s+/g, ''),
+        currentData?.["정답_영어"].toLowerCase().replace(/\s+/g, '')
     ];
 
     const feedback = document.getElementById("feedback");
@@ -128,6 +127,9 @@ function loadNextQuestion() {
     // 문제 로딩 시 입력란 활성화
     answerInput.disabled = false;  // 입력 필드 활성화
 
+    // 커서가 입력란에 자동으로 가도록 포커스 설정
+    answerInput.focus();
+
     startTimer();  // 타이머 시작
 }
 
@@ -142,13 +144,11 @@ function nextQuestion() {
     loadNextQuestion();  // 새로운 문제 로드
 }
 
-
 // 통계 업데이트 함수
 function updateStats() {
     const answered = currentQuestionIndex + 1; // 현재 푼 문제 수
     const accuracy = (correctAnswers / answered) * 100; // 정답률 계산
 
-    // 통계 HTML에 반영
     document.getElementById("answered").innerText = `${answered} / ${totalQuestions}`;
     document.getElementById("correct").innerText = correctAnswers;
     document.getElementById("accuracy").innerText = `${accuracy.toFixed(1)}%`;  // 소수점 한 자리까지 정답률 표시
@@ -188,4 +188,12 @@ categorySelect.addEventListener("change", (event) => {
     correctAnswers = 0;
     filterQuizByCategory(event.target.value);
     loadNextQuestion();
+});
+
+// 'Enter' 키 눌렀을 때 정답 확인 버튼 클릭 및 다음 문제 버튼 클릭
+document.getElementById("answer").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") { // Enter 키가 눌렸을 때
+        event.preventDefault(); // Enter 키 기본 동작 방지 (폼 제출 방지)
+        document.getElementById("check-answer").click(); // 정답 확인 버튼 클릭
+    }
 });

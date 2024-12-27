@@ -9,6 +9,7 @@
     <style>
         body {
             font-family: 'Pretendard', sans-serif;
+            background-color: #f9fafb; /* 배경색을 밝은 회색으로 변경 */
         }
 
         #timer-container {
@@ -25,90 +26,136 @@
             background-color: #34d399; /* Tailwind green-400 */
             transition: width 0.2s linear;
         }
+
+        #question {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #333333;
+        }
+
+        /* 버튼 스타일 변경 */
+        button {
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        /* 모바일에서 버튼 크기 줄이기 */
+        @media (max-width: 768px) {
+            #check-answer, #next-question {
+                padding: 12px 16px; /* 모바일에서 버튼 크기 줄이기 */
+            }
+        }
+
+        /* 화면 중앙 정렬을 위한 추가 설정 */
+        .center-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .quiz-container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-section {
+            padding: 30px;
+            border-radius: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .quiz-button {
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        /* 피드백 텍스트 스타일 */
+        #feedback {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
     </style>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto px-6 py-10 max-w-3xl">
-        <header class="text-center mb-10">
-            <h1 class="text-4xl font-bold text-gray-800">🩺 해부학 퀴즈</h1>
-            <p class="text-gray-600 mt-2 text-lg">재미있게 해부학 지식을 테스트해보세요!</p>
-            <p id="nickname-display" class="text-gray-500 mt-4 text-md"></p>
-        </header>
+<body>
 
-        <!-- 퀴즈 섹션 -->
-        <div id="quiz-section" class="bg-white rounded-lg shadow-md p-8">
-            <!-- 카테고리 및 언어 선택 -->
-            <div class="mb-8 flex justify-between items-center">
-                <select id="category" class="w-1/2 p-3 border rounded-lg">
-                    <option value="뼈">뼈</option>
-                    <option value="근육">근육</option>
-                </select>
-                <select id="language" class="w-1/2 p-3 border rounded-lg ml-4">
-                    <option value="korean">한국어</option>
-                    <option value="english">영어</option>
-                </select>
+    <div class="center-content">
+        <div class="quiz-container">
+            <header class="text-center mb-10">
+                <h1 class="text-4xl font-bold text-gray-800">해부학 퀴즈</h1>
+                <p class="text-gray-600 mt-2 text-lg">재미있게 해부학 지식을 테스트해보세요!</p>
+                <p id="nickname-display" class="text-gray-500 mt-4 text-md"></p>
+            </header>
+
+            <div id="quiz-section" class="quiz-section">
+                <div class="mb-8 flex flex-col md:flex-row justify-between items-center">
+                    <select id="category" class="w-full md:w-1/2 p-3 border rounded-lg mb-4 md:mb-0">
+                        <option value="뼈">뼈</option>
+                        <option value="근육">근육</option>
+                    </select>
+                    <select id="language" class="w-full md:w-1/2 p-3 border rounded-lg ml-4">
+                        <option value="korean">한국어</option>
+                        <option value="english">영어</option>
+                    </select>
+                </div>
+
+                <div id="timer-container">
+                    <div id="timer-bar"></div>
+                </div>
+
+                <p id="timer-text" class="hidden text-xl font-bold text-gray-700">남은 시간: <span id="timer-seconds">10</span>초</p>
+
+                <div id="question-container" class="mb-6">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">문제</h2>
+                    <p id="question" class="text-gray-700 bg-gray-50 p-4 rounded-lg shadow-inner"></p>
+                </div>
+
+                <div class="mb-6">
+                    <input type="text" id="answer" class="w-full p-3 border rounded-lg" placeholder="정답을 입력하세요">
+                </div>
+
+                <div id="feedback" class="mt-6 p-4 rounded-lg hidden text-center"></div>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button id="check-answer" class="quiz-button flex-1 bg-blue-500 text-white py-3 px-4 rounded-lg shadow-md hover:bg-blue-600">
+                        정답 확인
+                    </button>
+                    <button id="next-question" class="quiz-button flex-1 bg-gray-500 text-white py-3 px-4 rounded-lg shadow-md hover:bg-gray-600">
+                        다음 문제
+                    </button>
+                </div>
             </div>
 
-            <!-- 타이머 -->
-<div id="timer-container">
-    <div id="timer-bar"></div>
-</div>
-<!-- 타이머 텍스트는 이제 숨김 -->
-<p id="timer-text" class="hidden text-xl font-bold text-gray-700">남은 시간: <span id="timer-seconds">10</span>초</p>
-
-
-            <!-- 문제 -->
-            <div id="question-container" class="mb-6">
-                <h2 class="text-xl font-semibold mb-4 text-gray-800">문제</h2>
-                <p id="question" class="text-gray-700 bg-gray-50 p-4 rounded-lg shadow-inner"></p>
+            <div id="stats-section" class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <div class="text-gray-600 text-sm">정답률</div>
+                    <div id="accuracy" class="text-2xl font-bold">0%</div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <div class="text-gray-600 text-sm">푼 문제</div>
+                    <div id="answered" class="text-2xl font-bold">0 / <span id="total-questions">0</span></div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <div class="text-gray-600 text-sm">맞은 문제</div>
+                    <div id="correct" class="text-2xl font-bold">0</div>
+                </div>
             </div>
 
-            <!-- 정답 입력 -->
-            <div class="mb-6">
-                <input type="text" id="answer" 
-                       class="w-full p-3 border rounded-lg" 
-                       placeholder="정답을 입력하세요">
-            </div>
-
-            <!-- 피드백 -->
-            <div id="feedback" class="mt-6 p-4 rounded-lg hidden text-center"></div>
-
-            <!-- 버튼 -->
-            <div class="flex gap-4">
-                <button id="check-answer" 
-                        class="flex-1 bg-blue-500 text-white py-3 px-4 rounded-lg shadow-md hover:bg-blue-600">
-                    정답 확인
+            <div id="end-section" class="hidden text-center mt-12">
+                <h2 class="text-2xl font-bold text-gray-800">🎉 퀴즈 종료!</h2>
+                <p id="final-score" class="text-lg text-gray-700 mt-4"></p>
+                <button id="restart-quiz" class="mt-6 bg-blue-500 text-white py-3 px-6 rounded-lg shadow-md hover:bg-blue-600">
+                    다시 시작하기
                 </button>
-                <button id="next-question" 
-                        class="flex-1 bg-gray-500 text-white py-3 px-4 rounded-lg shadow-md hover:bg-gray-600">
-                    다음 문제
-                </button>
             </div>
-        </div>
-
-        <!-- 통계 -->
-        <div id="stats-section" class="mt-10 grid grid-cols-3 gap-4">
-            <div class="bg-white p-4 rounded-lg shadow-md text-center">
-                <div class="text-gray-600 text-sm">정답률</div>
-                <div id="accuracy" class="text-2xl font-bold">0%</div>
-            </div>
-            <div class="bg-white p-4 rounded-lg shadow-md text-center">
-                <div class="text-gray-600 text-sm">푼 문제</div>
-                <div id="answered" class="text-2xl font-bold">0 / <span id="total-questions">0</span></div>
-            </div>
-            <div class="bg-white p-4 rounded-lg shadow-md text-center">
-                <div class="text-gray-600 text-sm">맞은 문제</div>
-                <div id="correct" class="text-2xl font-bold">0</div>
-            </div>
-        </div>
-
-        <!-- 종료 섹션 -->
-        <div id="end-section" class="hidden text-center mt-12">
-            <h2 class="text-2xl font-bold text-gray-800">🎉 퀴즈 종료!</h2>
-            <p id="final-score" class="text-lg text-gray-700 mt-4"></p>
-            <button id="restart-quiz" class="mt-6 bg-blue-500 text-white py-3 px-6 rounded-lg shadow-md hover:bg-blue-600">
-                다시 시작하기
-            </button>
         </div>
     </div>
 
