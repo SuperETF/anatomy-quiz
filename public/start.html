@@ -13,93 +13,105 @@
 
         #timer-container {
             width: 100%;
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
+            height: 12px;
+            background-color: #e5e7eb; /* Tailwind gray-200 */
+            border-radius: 8px;
             overflow: hidden;
             margin-bottom: 20px;
         }
 
         #timer-bar {
-            width: 100%;
             height: 100%;
-            background-color: #4caf50;
+            background-color: #34d399; /* Tailwind green-400 */
             transition: width 0.2s linear;
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">해부학 퀴즈</h1>
-            <p class="text-gray-600 mt-2">해부학 지식을 테스트해보세요!</p>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-6 py-10 max-w-3xl">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-gray-800">🩺 해부학 퀴즈</h1>
+            <p class="text-gray-600 mt-2 text-lg">재미있게 해부학 지식을 테스트해보세요!</p>
+            <p id="nickname-display" class="text-gray-500 mt-4 text-md"></p>
         </header>
 
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <!-- 카테고리와 언어 선택 -->
-            <div class="mb-6 flex gap-4">
-                <select id="category" class="w-1/2 p-2 border rounded-md">
-                    <option value="bone">뼈</option>
-                    <option value="muscle">근육</option>
+        <!-- 퀴즈 섹션 -->
+        <div id="quiz-section" class="bg-white rounded-lg shadow-md p-8">
+            <!-- 카테고리 및 언어 선택 -->
+            <div class="mb-8 flex justify-between items-center">
+                <select id="category" class="w-1/2 p-3 border rounded-lg">
+                    <option value="뼈">뼈</option>
+                    <option value="근육">근육</option>
                 </select>
-                <select id="language" class="w-1/2 p-2 border rounded-md">
+                <select id="language" class="w-1/2 p-3 border rounded-lg ml-4">
                     <option value="korean">한국어</option>
                     <option value="english">영어</option>
                 </select>
             </div>
 
-            <!-- 타이머 바 -->
-            <div id="timer-container">
-                <div id="timer-bar"></div>
-            </div>
+            <!-- 타이머 -->
+<div id="timer-container">
+    <div id="timer-bar"></div>
+</div>
+<!-- 타이머 텍스트는 이제 숨김 -->
+<p id="timer-text" class="hidden text-xl font-bold text-gray-700">남은 시간: <span id="timer-seconds">10</span>초</p>
 
-            <!-- 문제 영역 -->
+
+            <!-- 문제 -->
             <div id="question-container" class="mb-6">
-                <h2 class="text-lg font-semibold mb-2">문제</h2>
-                <p id="question" class="text-gray-700"></p>
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">문제</h2>
+                <p id="question" class="text-gray-700 bg-gray-50 p-4 rounded-lg shadow-inner"></p>
             </div>
 
-            <!-- 답변 입력 -->
+            <!-- 정답 입력 -->
             <div class="mb-6">
                 <input type="text" id="answer" 
-                       class="w-full p-2 border rounded-md" 
-                       placeholder="답을 입력하세요">
+                       class="w-full p-3 border rounded-lg" 
+                       placeholder="정답을 입력하세요">
             </div>
+
+            <!-- 피드백 -->
+            <div id="feedback" class="mt-6 p-4 rounded-lg hidden text-center"></div>
 
             <!-- 버튼 -->
             <div class="flex gap-4">
-                <button onclick="checkAnswer()" 
-                        class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                <button id="check-answer" 
+                        class="flex-1 bg-blue-500 text-white py-3 px-4 rounded-lg shadow-md hover:bg-blue-600">
                     정답 확인
                 </button>
-                <button onclick="nextQuestion()" 
-                        class="flex-1 bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700">
+                <button id="next-question" 
+                        class="flex-1 bg-gray-500 text-white py-3 px-4 rounded-lg shadow-md hover:bg-gray-600">
                     다음 문제
                 </button>
             </div>
-
-            <!-- 피드백 메시지 -->
-            <div id="feedback" class="mt-4 p-4 rounded-md hidden"></div>
         </div>
 
         <!-- 통계 -->
-        <div class="mt-6 grid grid-cols-3 gap-4 text-center">
-            <div class="bg-white p-4 rounded-lg shadow-md">
-                <div class="text-gray-600">정답률</div>
+        <div id="stats-section" class="mt-10 grid grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                <div class="text-gray-600 text-sm">정답률</div>
                 <div id="accuracy" class="text-2xl font-bold">0%</div>
             </div>
-            <div class="bg-white p-4 rounded-lg shadow-md">
-                <div class="text-gray-600">푼 문제</div>
+            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                <div class="text-gray-600 text-sm">푼 문제</div>
                 <div id="answered" class="text-2xl font-bold">0 / <span id="total-questions">0</span></div>
             </div>
-            <div class="bg-white p-4 rounded-lg shadow-md">
-                <div class="text-gray-600">맞은 문제</div>
+            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                <div class="text-gray-600 text-sm">맞은 문제</div>
                 <div id="correct" class="text-2xl font-bold">0</div>
             </div>
         </div>
+
+        <!-- 종료 섹션 -->
+        <div id="end-section" class="hidden text-center mt-12">
+            <h2 class="text-2xl font-bold text-gray-800">🎉 퀴즈 종료!</h2>
+            <p id="final-score" class="text-lg text-gray-700 mt-4"></p>
+            <button id="restart-quiz" class="mt-6 bg-blue-500 text-white py-3 px-6 rounded-lg shadow-md hover:bg-blue-600">
+                다시 시작하기
+            </button>
+        </div>
     </div>
 
-    <script src="js/data.js" type="module"></script>
-    <script src="js/script.js" type="module"></script>
+    <script type="module" src="./js/script.js"></script>
 </body>
 </html>
